@@ -11,6 +11,7 @@ commands:
           when: on_fail
           command: |
             # Your code here
+            # aws cloudformation delete-stack --stack-name templateUdacity-${CIRCLE_WORKFLOW_ID}
             exit 1
 
   revert-migrations:
@@ -163,6 +164,7 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
+      - destroy-environment
       # Here's where you will add some code to rollback on failure      
 
   configure-infrastructure:
