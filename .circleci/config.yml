@@ -44,9 +44,9 @@ jobs:
           name: Build front-end
           command: |
             cd frontend
-            npm update
-            npm run build
             npm install npm@latest -g
+            npm run build
+            
             # npm audit fix
             #exit 1
       - save_cache:
@@ -64,7 +64,7 @@ jobs:
           name: Back-end build
           command: |
              cd backend
-             npm update
+             npm install npm@latest -g
              npm run build
              #  npm audit fix
              #exit 1
