@@ -97,7 +97,7 @@ jobs:
             npm run test
       - slack/notify:
           channel: 'cicd-udapeople-alert'
-          message: "Custom message to test effectiveness of slack integration in CICD-Pipeline"
+          # message: "Custom message to test effectiveness of slack integration in CICD-Pipeline"
           # event: fail,pass
               
       # Checkout code from git
