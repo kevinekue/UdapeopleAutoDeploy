@@ -1,6 +1,11 @@
 version: 2.1
 
-# commands:
+commands:
+  slack_notification:
+      steps:
+        - slack/status:
+            fail_only: false
+            failure_message: 'Slack Message from CircleCI regarding deployment process'
 #   destroy-environment:
 #     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
 #     parameters:
@@ -95,8 +100,9 @@ jobs:
             cd frontend
             npm install
             npm run test
-      - slack/notify:
-          channel: 'cicd-udapeople-alert'
+      - slack_notification
+      # - slack/notify:
+          # channel: 'cicd-udapeople-alert'
           # message: "Custom message to test effectiveness of slack integration in CICD-Pipeline"
           # event: fail,pass
               
