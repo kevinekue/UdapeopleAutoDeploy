@@ -12,11 +12,11 @@
 - name: "Install dependencies."
   become: yes
   apt:
-    name: ["nodejs"]
+    name: ["nodejs","npm"]
     state: latest
     update_cache: yes
 
-- name: "install pm2"
+- name: "Install pm2"
   become: yes
   npm:
     name: pm2
