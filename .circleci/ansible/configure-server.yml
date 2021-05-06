@@ -4,10 +4,7 @@
   hosts: web
   user: ubuntu
   gather_facts: false
-  vars:
-    - ansible_python_interpreter: /usr/bin/python3
-    - ansible_host_key_checking: false
-    - ansible_stdout_callback: yaml
+  
   environment:
     ENVIRONMENT: 'Dev'
     TYPEORM_CONNECTION: "{{ lookup('env','TYPEORM_CONNECTION') }}"
@@ -17,17 +14,22 @@
     TYPEORM_DATABASE: "{{ lookup('env','TYPEORM_DATABASE') }}"
     TYPEORM_MIGRATIONS: "{{ lookup('env','TYPEORM_MIGRATIONS') }}"
     TYPEORM_ENTITIES: "{{ lookup('env','TYPEORM_ENTITIES') }}"    
-  ansible_host_key_checking: false    
+  # ansible_host_key_checking: false    
+  vars:
+    - ansible_python_interpreter: /usr/bin/python3
+    - ansible_host_key_checking: false
+    - ansible_stdout_callback: yaml
 
   pre_tasks:
     - name: "wait 600 seconds for target connection to become reachable/usable."
       wait_for_connection:
+        timeout: 600
       # Your code here
 
-    - name: "install python for Ansible."
-      become: true
-      raw: test -e /usr/bin/python3 || (apt -y update && apt install -y python3)
-      changed_when: false
+    # - name: "install python for Ansible."
+    #   become: true
+    #   raw: test -e /usr/bin/python3 || (apt -y update && apt install -y python3)
+    #   changed_when: false
 
     - setup:
       # Your code here
