@@ -4,14 +4,18 @@ version: 2.1
 #   destroy-environment:
 #     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
 #     parameters:
-#       # Add parameter here   
+#       workflow-id:
+#         type: string
+#         default: ${CIRCLE_WORKFLOW_ID:0:7}
 #     steps:
 #       - run:
 #           name: Destroy environments
 #           when: on_fail
 #           command: |
-#             # Your code here
-#             exit 1
+#             aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}/ --recursive
+#             aws cloudformation delete-stack --stack-name frontend-${CIRCLE_WORKFLOW_ID:0:7}
+#             aws cloudformation delete-stack --stack-name backend-${CIRCLE_WORKFLOW_ID:0:7}
+#             #exit 1
 
 #   revert-migrations:
 #     description: Revert the last migration if successfully run in the current workflow.
@@ -214,25 +218,36 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
+      # - revert-migrations
+      # - destroy-environment
       # Here's where you will add some code to rollback on failure      
 
-#   configure-infrastructure:
-#     docker:
-#       # Docker image here that supports Ansible
-#     steps:
-#       # Checkout code from git
-#       # Add ssh keys with fingerprint
-#       # attach workspace
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # Your code here
-#             # exit 1
-#       - run:
-#           name: Configure server
-#           command: |
-#             # Your code here
-#             exit 1
+  configure-infrastructure:
+    docker:
+      - image: python:3.7-alpine3.11
+      # Docker image here that supports Ansible
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["b7:f0:73:f3:56:18:65:f0:ae:67:5e:e4:31:2d:e5:11"]
+      - attach_workspace:
+          at: ~/
+      # Checkout code from git
+      # Add ssh keys with fingerprint
+      # attach workspace
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update tar gzip ansible nodejs npm curl
+            pip install awscli
+            # exit 1
+      - run:
+          name: Configure server
+          command: |
+            ansible-playbook -i /tmp/.circleci/ansible/inventory.txt .circleci/ansible/configure-server.ym
+            # exit 1
+      #- revert-migrations
+     # - destroy-environment
 #       # Here's where you will add some code to rollback on failure      
 
 #   run-migrations:
