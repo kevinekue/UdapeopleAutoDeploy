@@ -256,13 +256,13 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      - restore_cache:
-          keys: [backend-build]
+      # - restore_cache:
+      #     keys: [backend-build]
       - run:
           name: Install npm
           command: |
             cd backend
-            npm install
+            npm install latest
             npm run build
             npm run migrations > migrationLogs.txt
             # cat migrationLogs.txt
