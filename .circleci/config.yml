@@ -256,23 +256,21 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      # - restore_cache:
-      #     keys: [backend-build]
+      - restore_cache:
+          keys: [backend-build]
       - run:
           name: Install npm
           command: |
             cd backend
             npm install latest
             npm run build
+      - run:
+          name: run migrations sub-job
+          no_output_timeout: 10m
+          command: |
             npm run migrations > migrationLogs.txt
-            # cat migrationLogs.txt
-      # - run:
-      #     name: run migrations sub-job
-      #     no_output_timeout: 10m
-      #     command: |
-            # npm run migrations > migrationLogs.txt
-            # cat migrationLogs.txt
-            # exit 1
+            cat migrationLogs.txt
+            
       - run:
           name: Send migration results to memstash
           command: |
