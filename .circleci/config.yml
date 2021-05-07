@@ -259,8 +259,8 @@ jobs:
       - run:
           name: Run migrations
           command: |
-            npm install
             cd backend
+            npm install
             npm run migrations > migrationLogs.txt
             cat migrationLogs.txt
             # exit 1
