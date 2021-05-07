@@ -257,10 +257,14 @@ jobs:
       # Checkout code from git
       - checkout
       - run:
-          name: Run migrations
+          name: Install npm
           command: |
             cd backend
             npm install
+      - run:
+          name: run migrations sub-job
+          no_output_timeout: 10m
+          command: |
             npm run migrations > migrationLogs.txt
             cat migrationLogs.txt
             # exit 1
